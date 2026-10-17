@@ -357,3 +357,173 @@ document.getElementById("gameCount").textContent=games.length+"+";
 renderGames();updateAdmin();
 </script>
 </body
+<!-- ALOYCE GAMES HUB: Supabase Login / Register -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+  #agh-auth {font-family:Arial,sans-serif;color:#fff}
+  #agh-auth button {
+    background:#087cff;color:white;border:0;border-radius:9px;
+    padding:12px 16px;font-weight:bold;cursor:pointer;margin:4px
+  }
+  #agh-auth input {
+    box-sizing:border-box;width:100%;padding:12px;margin:7px 0;
+    border:1px solid #888;border-radius:8px
+  }
+  #agh-auth .agh-panel {
+    background:#101827;border:1px solid #167dff;border-radius:15px;
+    padding:20px;width:calc(100% - 48px);max-width:380px;
+    margin:20px auto;text-align:center
+  }
+  #agh-auth .agh-hidden {display:none}
+  #agh-auth .agh-message {overflow-wrap:anywhere;font-size:14px}
+</style>
+
+<div id="agh-auth">
+  <div class="agh-panel">
+    <h2>🎮 ALOYCE GAMES HUB</h2>
+    <p id="agh-status">Ingia au fungua akaunti yako</p>
+
+    <div id="agh-forms">
+      <div id="agh-tabs">
+        <button type="button" id="agh-login-tab">Login</button>
+        <button type="button" id="agh-register-tab">Register</button>
+      </div>
+
+      <form id="agh-form">
+        <input id="agh-email" type="email"
+          placeholder="Email address" autocomplete="email" required>
+        <input id="agh-password" type="password"
+          placeholder="Password (angalau herufi 6)"
+          autocomplete="current-password" minlength="6" required>
+        <button id="agh-submit" type="submit">Login</button>
+      </form>
+    </div>
+
+    <div id="agh-account" class="agh-hidden">
+      <p id="agh-user"></p>
+      <button id="agh-logout" type="button">Logout</button>
+    </div>
+
+    <p id="agh-message" class="agh-message" aria-live="polite"></p>
+  </div>
+</div>
+
+<script>
+(() => {
+  // WEKA TAARIFA ZAKO ZA SUPABASE HAPA
+  const SUPABASE_URL = "WEKA_PROJECT_URL_HAPA";
+  const SUPABASE_PUBLISHABLE_KEY = "WEKA_PUBLISHABLE_KEY_HAPA";
+
+  const $ = id => document.getElementById(id);
+  let client;
+  let mode = "login";
+
+  function message(text) {
+    $("agh-message").textContent = text;
+  }
+
+  function setMode(nextMode) {
+    mode = nextMode;
+    $("agh-submit").textContent =
+      mode === "login" ? "Login" : "Create Account";
+    $("agh-password").autocomplete =
+      mode === "login" ? "current-password" : "new-password";
+    message("");
+  }
+
+  $("agh-login-tab").addEventListener("click", () => setMode("login"));
+  $("agh-register-tab").addEventListener("click", () => setMode("register"));
+
+  function showSession(session) {
+    const signedIn = !!session;
+    $("agh-forms").classList.toggle("agh-hidden", signedIn);
+    $("agh-account").classList.toggle("agh-hidden", !signedIn);
+    $("agh-status").textContent = signedIn
+      ? "Umeingia kwenye akaunti yako!"
+      : "Ingia au fungua akaunti yako";
+    $("agh-user").textContent = signedIn
+      ? "Umeingia kama: " + session.user.email
+      : "";
+  }
+
+  async function start() {
+    if (SUPABASE_URL.includes("WEKA_") ||
+        SUPABASE_PUBLISHABLE_KEY.includes("WEKA_")) {
+      message("Kwanza weka Project URL na Publishable key zako.");
+      return;
+    }
+
+    if (!window.supabase) {
+      message("Imeshindikana kupakia Supabase. Angalia intaneti.");
+      return;
+    }
+
+    client = window.supabase.createClient(
+      SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY
+    );
+
+    client.auth.onAuthStateChange((_event, session) => {
+      showSession(session);
+    });
+
+    const { data, error } = await client.auth.getSession();
+    if (error) message(error.message);
+    else showSession(data.session);
+  }
+
+  $("agh-form").addEventListener("submit", async event => {
+    event.preventDefault();
+    if (!client) {
+      message("Weka kwanza taarifa sahihi za Supabase.");
+      return;
+    }
+
+    const email = $("agh-email").value.trim();
+    const password = $("agh-password").value;
+    const submit = $("agh-submit");
+
+    submit.disabled = true;
+    message("Tafadhali subiri...");
+
+    try {
+      if (mode === "register") {
+        const { data, error } = await client.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: window.location.href.split("#")[0]
+          }
+        });
+        if (error) throw error;
+
+        if (data.session) {
+          message("Akaunti imetengenezwa na umeingia!");
+        } else {
+          message("Angalia email yako kuthibitisha akaunti kabla ya Login.");
+        }
+      } else {
+        const { error } = await client.auth.signInWithPassword({
+          email, password
+        });
+        if (error) throw error;
+        message("Login imefanikiwa!");
+      }
+    } catch (error) {
+      message("Tatizo: " + error.message);
+    } finally {
+      submit.disabled = false;
+    }
+  });
+
+  $("agh-logout").addEventListener("click", async () => {
+    if (!client) return;
+    const { error } = await client.auth.signOut();
+    message(error ? error.message : "Umetoka kwenye akaunti.");
+  });
+
+  start().catch(error => message(error.message));
+})();
+  </script>
+  const SUPABASE_URL = "https://enehqncnllpztnsdjtvz.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_MCFqR4mRGn_HR-64uBHuSQ_C_Z5vMeN";
