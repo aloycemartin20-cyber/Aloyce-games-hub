@@ -104,3 +104,256 @@ renderGames();
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080d18">
+<meta name="description" content="ALOYCE GAMES HUB - Discover PC games, Android games, gaming news and cloud gaming.">
+<title>ALOYCE GAMES HUB | Pro Gaming Store</title>
+<style>
+:root{--bg:#080d18;--panel:#111b2d;--panel2:#17243a;--blue:#2584ff;--cyan:#32e6ff;--text:#f4f7ff;--muted:#a6b4cc;--border:#283b57}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.6}
+a{color:var(--cyan);text-decoration:none}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.container{width:min(1150px,92%);margin:auto}
+header{position:sticky;top:0;z-index:10;background:#080d18ed;border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:14px 0;flex-wrap:wrap}
+.logo{font-size:19px;font-weight:900;letter-spacing:.5px}
+.logo span{color:var(--cyan)}
+.links{display:flex;gap:15px;align-items:center;flex-wrap:wrap}
+.links a{color:var(--text);font-size:14px}
+.btn{border:0;border-radius:9px;padding:10px 15px;background:var(--blue);color:white;font-weight:700;display:inline-block}
+.btn.secondary{background:var(--panel2);border:1px solid var(--border)}
+.btn.outline{background:transparent;border:1px solid var(--cyan);color:var(--cyan)}
+.hero{padding:65px 0 40px;background:radial-gradient(ellipse at 80% 20%,#174a8255,transparent 50%),linear-gradient(135deg,#080d18,#101d32)}
+.eyebrow{color:var(--cyan);font-weight:800;font-size:12px;letter-spacing:2px}
+h1{font-size:clamp(34px,7vw,65px);line-height:1.08;margin:14px 0}
+.gradient{background:linear-gradient(90deg,#fff,var(--cyan),#4d91ff);background-clip:text;-webkit-background-clip:text;color:transparent}
+.hero p,.muted{color:var(--muted)}
+.hero p{max-width:650px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:35px}
+.stat,.card,.feature,.news-card,.cloud-card{background:var(--panel);border:1px solid var(--border);border-radius:14px}
+.stat{padding:14px}
+.stat strong{display:block;font-size:21px}
+.stat span{font-size:12px;color:var(--muted)}
+section{padding:36px 0;scroll-margin-top:90px}
+.section-head{display:flex;justify-content:space-between;gap:15px;align-items:end;flex-wrap:wrap;margin-bottom:20px}
+h2{margin:0;font-size:26px}
+h3{margin:8px 0}
+.toolbar{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin:18px 0}
+.field{width:100%;padding:12px;border:1px solid var(--border);border-radius:9px;background:#0b1423;color:white}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{overflow:hidden}
+.cover{height:130px;display:grid;place-items:center;background:linear-gradient(135deg,#123158,#17213a,#173e58);font-size:46px}
+.card-body{padding:15px}
+.card h3{font-size:17px}
+.tag{display:inline-block;background:#1b3655;color:#aeeaff;border-radius:5px;padding:3px 7px;font-size:11px;margin:2px}
+.card p{color:var(--muted);font-size:13px;min-height:42px}
+.card-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.card-actions .btn{font-size:12px;padding:8px 10px}
+.favorite{background:#30213c;color:#ffb8df}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.feature,.news-card,.cloud-card{padding:18px}
+.feature .emoji{font-size:27px}
+.news-grid,.cloud-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.news-card p,.cloud-card p{font-size:13px;color:var(--muted)}
+.notice{padding:13px;border-radius:10px;background:#142b43;border:1px solid #275279;color:#cbe7ff;font-size:13px}
+footer{border-top:1px solid var(--border);padding:25px 0;color:var(--muted);font-size:13px}
+footer .container{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.modal{position:fixed;inset:0;background:#000b;display:none;place-items:center;padding:16px;z-index:30}
+.modal.show{display:grid}
+.modal-box{width:min(450px,100%);max-height:90vh;overflow:auto;background:var(--panel);border:1px solid var(--border);border-radius:15px;padding:22px}
+.modal-box input{margin:7px 0 12px}
+.close-row{display:flex;justify-content:space-between;align-items:center}
+.hidden{display:none!important}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#173e34;color:#fff;padding:12px 18px;border-radius:10px;display:none;z-index:50;max-width:90%;text-align:center}
+.empty{padding:25px;text-align:center;color:var(--muted);grid-column:1/-1}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.features,.news-grid,.cloud-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.toolbar{grid-template-columns:1fr 1fr}.toolbar input{grid-column:1/-1}.links{gap:10px}.links a{font-size:12px}}
+@media(max-width:450px){.grid,.features,.news-grid,.cloud-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}.stat{padding:9px}.stat strong{font-size:17px}.logo{font-size:16px}.hero{padding-top:42px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="container nav">
+  <a class="logo" href="#home">🎮 ALOYCE <span>GAMES HUB</span></a>
+  <nav class="links" aria-label="Main navigation">
+   <a href="#games">Games</a><a href="#features">Features</a><a href="#news">News</a><a href="#cloud">Cloud</a>
+  </nav>
+  <button class="btn" onclick="openModal('authModal')">Sign in</button>
+ </div>
+</header>
+
+<main>
+<section class="hero" id="home">
+ <div class="container">
+  <div class="eyebrow">YOUR WORLD. YOUR GAMES.</div>
+  <h1>DISCOVER YOUR<br><span class="gradient">NEXT LEVEL.</span></h1>
+  <p>Karibu ALOYCE GAMES HUB — sehemu ya kugundua PC games, Android games, open-world adventures, racing, sports na huduma za cloud gaming.</p>
+  <div class="actions">
+   <a class="btn" href="#games">🎮 Explore Games</a>
+   <a class="btn secondary" href="#cloud">☁️ Cloud Gaming</a>
+  </div>
+  <div class="stats">
+   <div class="stat"><strong id="gameCount">12+</strong><span>Games listed</span></div>
+   <div class="stat"><strong>PC + Mobile</strong><span>Platforms</span></div>
+   <div class="stat"><strong>Free access</strong><span>Browse catalog</span></div>
+  </div>
+ </div>
+</section>
+
+<section id="games">
+ <div class="container">
+  <div class="section-head">
+   <div><div class="eyebrow">THE GAME LIBRARY</div><h2>Explore Games</h2></div>
+   <button class="btn secondary" onclick="showFavorites()">♥ My Favorites</button>
+  </div>
+  <p class="muted">Tafuta mchezo, chagua category au platform. Download links zinaelekeza kwenye tovuti rasmi pale inapopatikana.</p>
+  <div class="toolbar">
+   <input class="field" id="search" placeholder="🔎 Search games..." aria-label="Search games">
+   <select class="field" id="category" aria-label="Filter category">
+    <option value="all">All categories</option><option>Open World</option><option>Action</option><option>Sports</option><option>Racing</option><option>Adventure</option><option>Free & Open Source</option>
+   </select>
+   <select class="field" id="platform" aria-label="Filter platform">
+    <option value="all">All platforms</option><option value="PC">PC</option><option value="Android">Android</option><option value="PC / Android">PC / Android</option>
+   </select>
+  </div>
+  <div id="gameList" class="grid"></div>
+  <p class="notice" style="margin-top:20px">ℹ️ Baadhi ya michezo inahitaji PC au kifaa kinachokidhi mahitaji yake. Angalia requirements na masharti ya publisher kabla ya kupakua.</p>
+ </div>
+</section>
+
+<section id="features">
+ <div class="container">
+  <div class="section-head"><div><div class="eyebrow">MADE FOR PLAYERS</div><h2>Hub Features</h2></div></div>
+  <div class="features">
+   <article class="feature"><div class="emoji">🔎</div><h3>Smart Search</h3><p class="muted">Tafuta michezo kwa jina, category au platform.</p></article>
+   <article class="feature"><div class="emoji">♥️</div><h3>Favorites</h3><p class="muted">Hifadhi michezo unayopenda kwenye browser yako.</p></article>
+   <article class="feature"><div class="emoji">🛡️</div><h3>Official Links</h3><p class="muted">Gundua tovuti rasmi za games na publishers.</p></article>
+   <article class="feature"><div class="emoji">📱</div><h3>Mobile Friendly</h3><p class="muted">Muonekano unaolingana na simu, tablet na PC.</p></article>
+   <article class="feature"><div class="emoji">📰</div><h3>Gaming News</h3><p class="muted">Mwongozo na viungo vya kupata habari za gaming.</p></article>
+   <article class="feature"><div class="emoji">☁️</div><h3>Cloud Gaming</h3><p class="muted">Gundua huduma zinazoweza ku-stream michezo.</p></article>
+  </div>
+ </div>
+</section>
+
+<section id="news">
+ <div class="container">
+  <div class="section-head"><div><div class="eyebrow">STAY IN THE GAME</div><h2>Gaming News & Guides</h2></div></div>
+  <div class="news-grid">
+   <article class="news-card"><span class="tag">GUIDE · PC</span><h3>Before installing a PC game</h3><p>Angalia operating system, RAM, storage na graphics requirements.</p><a href="https://store.steampowered.com/" target="_blank" rel="noopener">Explore Steam ↗</a></article>
+   <article class="news-card"><span class="tag">GUIDE · ANDROID</span><h3>Play safely on mobile</h3><p>Pakua kutoka vyanzo rasmi na kagua nafasi ya storage na compatibility.</p><a href="https://play.google.com/store/games" target="_blank" rel="noopener">Google Play Games ↗</a></article>
+   <article class="news-card"><span class="tag">COMMUNITY</span><h3>Gaming updates</h3><p>Fuatilia matangazo mapya ya games na taarifa za developers.</p><a href="https://www.rockstargames.com/newswire" target="_blank" rel="noopener">Rockstar Newswire ↗</a></article>
+  </div>
+ </div>
+</section>
+
+<section id="cloud">
+ <div class="container">
+  <div class="section-head"><div><div class="eyebrow">PLAY FROM THE CLOUD</div><h2>Cloud Gaming</h2></div></div>
+  <p class="muted">Cloud gaming hutegemea internet yenye kasi na upatikanaji wa huduma katika nchi yako. Bei, games na mahitaji hutofautiana.</p>
+  <div class="cloud-grid">
+   <article class="cloud-card"><div class="emoji">☁️</div><h3>NVIDIA GeForce NOW</h3><p>Angalia upatikanaji wa huduma na games zinazotumika.</p><a class="btn" href="https://www.nvidia.com/en-us/geforce-now/" target="_blank" rel="noopener">Official Website ↗</a></article>
+   <article class="cloud-card"><div class="emoji">🎮</div><h3>Xbox Cloud Gaming</h3><p>Angalia nchi zinazoungwa mkono, subscription na requirements.</p><a class="btn" href="https://www.xbox.com/en-US/cloud-gaming" target="_blank" rel="noopener">Official Website ↗</a></article>
+   <article class="cloud-card"><div class="emoji">🕹️</div><h3>Steam Remote Play</h3><p>Stream games kutoka PC yako kwenda vifaa vingine vinavyoungwa mkono.</p><a class="btn" href="https://store.steampowered.com/remoteplay" target="_blank" rel="noopener">Official Website ↗</a></article>
+  </div>
+ </div>
+</section>
+
+<section id="about">
+ <div class="container">
+  <div class="feature">
+   <div class="eyebrow">ABOUT THE HUB</div><h2>Welcome to ALOYCE GAMES HUB</h2>
+   <p class="muted">Jukwaa la gaming linalosaidia wachezaji kugundua games, kutafuta vyanzo rasmi, kusoma miongozo na kujua huduma za cloud gaming.</p>
+   <p>Contact: <a href="mailto:aloycegamer206@gmail.com">aloycegamer206@gmail.com</a></p>
+   <p class="muted">Tovuti hii si affiliate ya Rockstar Games, Steam, Xbox au NVIDIA. Majina na trademarks ni mali ya wamiliki wake.</p>
+  </div>
+ </div>
+</section>
+</main>
+
+<footer><div class="container"><span>© <span id="year"></span> ALOYCE GAMES HUB</span><span>Play • Explore • Enjoy 🎮</span><button class="btn secondary" onclick="openModal('adminModal')">Admin Demo</button></div></footer>
+
+<div class="modal" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+ <div class="modal-box">
+  <div class="close-row"><h2 id="authTitle">Player Account</h2><button class="btn secondary" onclick="closeModal('authModal')">✕</button></div>
+  <p class="muted">Demo tu — taarifa hizi hazitumiwi kwenye server.</p>
+  <label for="authName">Name (Register only)</label><input class="field" id="authName" placeholder="Your gamer name">
+  <label for="authEmail">Email</label><input class="field" id="authEmail" type="email" placeholder="you@example.com">
+  <label for="authPassword">Password</label><input class="field" id="authPassword" type="password" placeholder="Demo password">
+  <div class="actions"><button class="btn" onclick="demoAuth('login')">Sign in Demo</button><button class="btn secondary" onclick="demoAuth('register')">Register Demo</button></div>
+  <p class="muted" style="font-size:12px">Usitumie password yako halisi. Mfumo huu si authentication salama.</p>
+ </div>
+</div>
+
+<div class="modal" id="adminModal" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+ <div class="modal-box">
+  <div class="close-row"><h2 id="adminTitle">Admin Dashboard Demo</h2><button class="btn secondary" onclick="closeModal('adminModal')">✕</button></div>
+  <p class="muted">Hii ni dashboard ya majaribio inayoonekana kwa kila mgeni. Haijalindwa na admin login.</p>
+  <div class="stat"><strong id="adminGames">0</strong><span>Games in catalog</span></div>
+  <div class="stat" style="margin-top:10px"><strong id="adminFavorites">0</strong><span>Favorites saved on this browser</span></div>
+  <p class="notice">Kwa admin halisi, tutahitaji backend, database na role-based access control.</p>
+ </div>
+</div>
+<div id="toast" role="status"></div>
+
+<script>
+"use strict";
+const games = [
+{id:"gtav",name:"Grand Theft Auto V",platform:"PC",category:"Open World",icon:"🚘",desc:"Explore Los Santos katika open-world action adventure.",url:"https://www.rockstargames.com/gta-v"},
+{id:"gtao",name:"GTA Online",platform:"PC",category:"Open World",icon:"🌆",desc:"Explore ulimwengu wa GTA Online na marafiki.",url:"https://www.rockstargames.com/gta-online"},
+{id:"bully",name:"Bully: Scholarship Edition",platform:"PC",category:"Adventure",icon:"🎒",desc:"Adventure game kutoka Rockstar Games.",url:"https://www.rockstargames.com/"},
+{id:"nba2k",name:"NBA 2K",platform:"PC / Android",category:"Sports",icon:"🏀",desc:"Basketball series. Angalia edition na platform inayopatikana.",url:"https://nba.2k.com/"},
+{id:"efootball",name:"eFootball",platform:"PC / Android",category:"Sports",icon:"⚽",desc:"Free-to-play football game kutoka Konami.",url:"https://www.konami.com/efootball/"},
+{id:"fallguys",name:"Fall Guys",platform:"PC",category:"Action",icon:"🏁",desc:"Colorful multiplayer obstacle-course game.",url:"https://www.fallguys.com/"},
+{id:"godot",name:"Godot Engine",platform:"PC",category:"Free & Open Source",icon:"🛠️",desc:"Free, open-source engine ya kutengeneza games.",url:"https://godotengine.org/"},
+{id:"supertux",name:"SuperTuxKart",platform:"PC / Android",category:"Racing",icon:"🏎️",desc:"Free and open-source kart racing game.",url:"https://supertuxkart.net/"},
+{id:"0ad",name:"0 A.D.",platform:"PC",category:"Free & Open Source",icon:"🏛️",desc:"Historical real-time strategy game.",url:"https://play0ad.com/"},
+{id:"assaultcube",name:"AssaultCube",platform:"PC",category:"Action",icon:"🎯",desc:"Lightweight first-person shooter.",url:"https://assault.cubers.net/"},
+{id:"openttd",name:"OpenTTD",platform:"PC",category:"Free & Open Source",icon:"🚂",desc:"Open-source transport simulation game.",url:"https://www.openttd.org/"},
+{id:"minetest",name:"Luanti (Minetest)",platform:"PC / Android",category:"Adventure",icon:"🧱",desc:"Open-source voxel game platform.",url:"https://www.luanti.org/"}
+];
+const favKey="aloyceHubFavoritesV1";
+let favorites=readFavorites();
+let favoritesOnly=false;
+function readFavorites(){try{const x=JSON.parse(localStorage.getItem(favKey)||"[]");return Array.isArray(x)?x:[]}catch(e){return []}}
+function saveFavorites(){try{localStorage.setItem(favKey,JSON.stringify(favorites))}catch(e){toast("Browser haikuruhusu kuhifadhi favorites.")}}
+function escapeHTML(value){return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function renderGames(){
+ const q=document.getElementById("search").value.trim().toLowerCase();
+ const cat=document.getElementById("category").value;
+ const plat=document.getElementById("platform").value;
+ const filtered=games.filter(g=>(!favoritesOnly||favorites.includes(g.id))&&(cat==="all"||g.category===cat)&&(plat==="all"||g.platform===plat)&&(`${g.name} ${g.category} ${g.platform} ${g.desc}`.toLowerCase().includes(q)));
+ const root=document.getElementById("gameList");
+ if(!filtered.length){root.innerHTML='<div class="empty">Hakuna games zilizopatikana. Jaribu search au filter nyingine.</div>';return}
+ root.innerHTML=filtered.map(g=>`<article class="card"><div class="cover" aria-hidden="true">${g.icon}</div><div class="card-body"><span class="tag">${escapeHTML(g.platform)}</span><span class="tag">${escapeHTML(g.category)}</span><h3>${escapeHTML(g.name)}</h3><p>${escapeHTML(g.desc)}</p><div class="card-actions"><a class="btn" href="${g.url}" target="_blank" rel="noopener noreferrer">Official Link ↗</a><button class="btn favorite" onclick="toggleFavorite('${g.id}')">${favorites.includes(g.id)?"♥ Saved":"♡ Favorite"}</button></div></div></article>`).join("");
+}
+function toggleFavorite(id){favorites=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];saveFavorites();renderGames();updateAdmin();toast(favorites.includes(id)?"Added to favorites":"Removed from favorites")}
+function showFavorites(){favoritesOnly=!favoritesOnly;document.getElementById("games").scrollIntoView();renderGames();toast(favoritesOnly?"Showing favorites":"Showing all games")}
+function openModal(id){document.getElementById(id).classList.add("show")}
+function closeModal(id){document.getElementById(id).classList.remove("show")}
+function toast(message){const t=document.getElementById("toast");t.textContent=message;t.style.display="block";clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.style.display="none",2600)}
+function demoAuth(mode){
+ const email=document.getElementById("authEmail").value.trim();
+ const password=document.getElementById("authPassword").value;
+ if(!email||!password){toast("Jaza email na demo password kwanza.");return}
+ if(mode==="register"&&!document.getElementById("authName").value.trim()){toast("Jaza gamer name kwa demo register.");return}
+ closeModal("authModal");
+ toast(mode==="login"?"Demo sign-in imeonyeshwa. Hakuna akaunti halisi iliyothibitishwa.":"Demo registration imekamilika kwenye mwonekano tu.");
+}
+function updateAdmin(){document.getElementById("adminGames").textContent=games.length;document.getElementById("adminFavorites").textContent=favorites.length}
+document.getElementById("search").addEventListener("input",()=>{favoritesOnly=false;renderGames()});
+document.getElementById("category").addEventListener("change",()=>{favoritesOnly=false;renderGames()});
+document.getElementById("platform").addEventListener("change",()=>{favoritesOnly=false;renderGames()});
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("show")}));
+document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll(".modal.show").forEach(m=>m.classList.remove("show"))});
+document.getElementById("year").textContent=new Date().getFullYear();
+document.getElementById("gameCount").textContent=games.length+"+";
+renderGames();updateAdmin();
+</script>
+</body
